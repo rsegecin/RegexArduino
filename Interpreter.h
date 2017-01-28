@@ -4,34 +4,36 @@
 #include <Arduino.h>
 #include "Regexp.h"
 
-template<class T, void(T::*PTR)(GlobalMatchCallback), size_t I>
+template<class T, void(T::*PTR)(const char *, const unsigned int, const MatchState &), size_t I>
 struct bind_regex_member
 {
-	typedef void(*fn_type)(GlobalMatchCallback);
-	explicit bind_regex_member(const T* _ptr)
-	{
-		ptr = _ptr;
-	}
-	static void func(GlobalMatchCallback f)
-	{
-		(ptr->*PTR)(f);
-	}
-	operator fn_type()
-	{
-		return &func;
-	}
+    typedef void(*fn_type)(const char *, const unsigned int, const MatchState &);
+    explicit bind_regex_member(T* _ptr)
+    {
+        ptr = _ptr;
+    }
+    static void func(const char * match, const unsigned int length, const MatchState & ms)
+    {
+        (ptr->*PTR)(match, length, ms);
+    }
+    operator fn_type()
+    {
+        return &func;
+    }
 private:
-	static const T*  ptr;
+    static T*  ptr;
 };
 
-template<class T, void(T::*PTR)(GlobalMatchCallback), size_t I>
-const T* bind_regex_member<T, PTR, I>::ptr = NULL;
+template<class T,
+
+void(T::*PTR)(const char *, const unsigned int, const MatchState &), size_t  I>
+T* bind_regex_member<T, PTR, I>::ptr = NULL;
 
 class InterpreterClass
 {
  public:
 	void init();
-	GlobalMatchCallback MatchAddressCallback;
+	void MatchAddressCallback(const char * match, const unsigned int length, const MatchState & ms);
 };
 
 extern InterpreterClass Interpreter;

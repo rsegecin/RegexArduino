@@ -2,7 +2,7 @@
 
 void InterpreterClass::init()
 {
-	MatchState ms("txtIpAddress=255.255.255.255");
+	MatchState ms("txtIpAddress=192.168.0.213");
 
 	bind_regex_member<InterpreterClass, &InterpreterClass::MatchAddressCallback, 0> b(this);
 	ms.GlobalMatch("txtIpAddress=(%d%d?%d?)%.(%d%d?%d?)%.(%d%d?%d?)%.(%d%d?%d?)", b);
@@ -27,7 +27,7 @@ void InterpreterClass::MatchAddressCallback(const char * match, const unsigned i
 	
 		if (valid)
 		{
-	
+	        Serial.println("found match");
 		}
 	}
 }
