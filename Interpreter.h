@@ -1,7 +1,7 @@
 #ifndef _INTERPRETER_h
 #define _INTERPRETER_h
 
-#include "arduino.h"
+#include <Arduino.h>
 #include "Regexp.h"
 
 template<class T, void(T::*PTR)(GlobalMatchCallback), size_t I>

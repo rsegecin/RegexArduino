@@ -1,0 +1,47 @@
+
+
+
+
+
+
+
+
+
+
+In file included from RegexTest.ino:1:0:
+Interpreter.h:4:21: fatal error: arduino.h: No such file or directory
+ #include "arduino.h"
+                     ^
+compilation terminated.
+
+
+
+
+
+
+
+
+
+
+Interpreter.cpp: In member function ‘void InterpreterClass::init()’:
+Interpreter.cpp:7:80: error: could not convert template argument ‘&InterpreterClass::MatchAddressCallback’ to ‘void (InterpreterClass::*)(GlobalMatchCallback) {aka void (InterpreterClass::*)(void (*)(const char*, unsigned int, const MatchState&))}’
+  bind_regex_member<InterpreterClass, &InterpreterClass::MatchAddressCallback, 0> b(this);
+                                                                                ^
+Interpreter.cpp:7:83: error: invalid type in declaration before ‘(’ token
+  bind_regex_member<InterpreterClass, &InterpreterClass::MatchAddressCallback, 0> b(this);
+                                                                                   ^
+Interpreter.cpp:7:88: error: invalid conversion from ‘InterpreterClass*’ to ‘int’ [-fpermissive]
+  bind_regex_member<InterpreterClass, &InterpreterClass::MatchAddressCallback, 0> b(this);
+                                                                                        ^
+Interpreter.cpp:8:81: error: invalid conversion from ‘int’ to ‘GlobalMatchCallback {aka void (*)(const char*, unsigned int, const MatchState&)}’ [-fpermissive]
+  ms.GlobalMatch("txtIpAddress=(%d%d?%d?)%.(%d%d?%d?)%.(%d%d?%d?)%.(%d%d?%d?)", b);
+                                                                                 ^
+In file included from Interpreter.h:5:0,
+                 from Interpreter.cpp:1:
+Regexp.h:120:16: note: initializing argument 2 of ‘unsigned int MatchState::GlobalMatch(const char*, GlobalMatchCallback)’
+   unsigned int GlobalMatch (const char * pattern, GlobalMatchCallback f);
+                ^
+Interpreter.cpp: At global scope:
+Interpreter.cpp:11:113: error: no ‘void InterpreterClass::MatchAddressCallback(const char*, unsigned int, const MatchState&)’ member function declared in class ‘InterpreterClass’
+ void InterpreterClass::MatchAddressCallback(const char * match, const unsigned int length, const MatchState & ms)
+                                                                                                                 ^
