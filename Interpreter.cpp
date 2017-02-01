@@ -1,36 +1,37 @@
 #include "Interpreter.h"
 
-void InterpreterClass::init()
+void InterpreterClass::init(SerialInterpreterClass * serial)
 {
-	MatchState ms("txtIpAddress=255.255.255.255");
+	lSerialInterpreter = serial;
+}
+
+void InterpreterClass::Process(char * str, char * regex)
+{
+	MatchState ms(str);
+
+	lSerialInterpreter->Send("Processing");
 
 	bind_regex_member<InterpreterClass, &InterpreterClass::MatchAddressCallback, 0> b(this);
-	ms.GlobalMatch("txtIpAddress=(%d%d?%d?)%.(%d%d?%d?)%.(%d%d?%d?)%.(%d%d?%d?)", b);
+	ms.GlobalMatch(regex, b);
 }
 
 void InterpreterClass::MatchAddressCallback(const char * match, const unsigned int length, const MatchState & ms)
 {
-	char cap[10];
-	int aux;
-	bool valid = true;
-	
-	if (ms.level == 4)
+	if (ms.level > 0)
 	{
-		for (byte i = 0; i < ms.level; i++)
+		sprintf(buffer, "Matches %u", ms.level);
+		lSerialInterpreter->Send(buffer);
+
+		for (uint8_t i = 0; i < ms.level; i++)
 		{
-			ms.GetCapture(cap, i);
-			aux = atoi(cap);
-	
-			if ((aux < 0) || (255 < aux))
-				valid = false;
+			ms.GetCapture(buffer, i);
+			lSerialInterpreter->Send(buffer);
 		}
-	
-		if (valid)
-		{
-	
-		}
+	}
+	else
+	{
+		lSerialInterpreter->Send("No matches found.");
 	}
 }
 
 InterpreterClass Interpreter;
-
